@@ -18,7 +18,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    //在req中加一个user段
+
     return user;
   }
 }

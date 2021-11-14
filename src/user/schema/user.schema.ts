@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-
+//MongodbModule引入时配置的schema
 export const UserSchema = new mongoose.Schema({
   username: {
     type: String,

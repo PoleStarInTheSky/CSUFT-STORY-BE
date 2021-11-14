@@ -3,10 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UserSchema } from './schema/user.schema';
+import { UserSchema } from '../user/schema/user.schema';
 import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt-auth.strategy';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -19,8 +19,8 @@ import { LocalStrategy } from './strategies/local.strategy';
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, LocalStrategy],
+
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

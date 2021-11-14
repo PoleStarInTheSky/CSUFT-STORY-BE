@@ -1,11 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
-
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { User } from './interface/user.interface';
+import { User } from '../user/interface/user.interface';
 
 @Injectable()
 export class AuthService {
@@ -18,38 +16,15 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  /*
-   *async的返回值一定是一个Promise对象
-   *Promise<void>，这里的void泛型意思是Promise resolve的值是void，即undefined
-   */
-  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void | string> {
-    const { username, password } = authCredentialsDto;
-
-    //bcrypt是一种加密算法，第二个参数越高表示生成的哈希越安全
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = new this.userModel({ username, password: hashedPassword });
-
-    try {
-      await user.save();
-      return 'Sign up successfully';
-    } catch (error) {
-      if (error.code === 11000) {
-        throw new ConflictException('User already exists');
-      }
-      throw error;
-    }
-  }
-
   //简单地用jwtService签发token给客户端，controller会在调用guard之后调用这个方法
-  async signIn(user: User) {
+  async certificateUser(user: User) {
     const payload = { username: user.username, sub: user._id };
     return {
       accessToken: this.jwtService.sign(payload),
     };
   }
 
-  //验证用户的具体逻辑
+  //给local strategy使用的验证方法，对用户做登录验证
   async validateUser(username: string, pass: string): Promise<User> {
     const user = await this.userModel.findOne({ username });
     //因为username是唯一的，所以没找到就是失败

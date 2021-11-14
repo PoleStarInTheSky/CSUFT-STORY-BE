@@ -1,6 +1,6 @@
 import { IsString, MaxLength, MinLength } from 'class-validator';
 
-export class AuthCredentialsDto {
+export class UserRegisterDto {
   @IsString()
   @MinLength(4, { message: 'username is too short (4 characters min)' })
   @MaxLength(20, { message: 'username is too long (20 characters max)' })
