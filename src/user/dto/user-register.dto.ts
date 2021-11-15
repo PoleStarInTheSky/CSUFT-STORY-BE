@@ -1,5 +1,5 @@
 import { IsString, MaxLength, MinLength } from 'class-validator';
-
+//在controller中给validation pipe用的
 export class UserRegisterDto {
   @IsString()
   @MinLength(4, { message: 'username is too short (4 characters min)' })
