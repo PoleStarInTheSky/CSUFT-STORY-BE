@@ -11,7 +11,9 @@ import { JwtStrategy } from './strategies/jwt-auth.strategy';
   imports: [
     ConfigModule.forRoot(),
     //参数的name对应表中collection的名字，会转成小写然后加s
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: 'User', schema: UserSchema, collection: 'user' },
+    ]),
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,

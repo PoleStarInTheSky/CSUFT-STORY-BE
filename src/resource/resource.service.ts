@@ -11,7 +11,10 @@ export class ResourceService {
     const cnt = await this.userModel.count().exec();
     //均匀生成[0,cnt-1]的整数
     const random = Math.floor(Math.random() * cnt);
-    const res = await this.userModel.findOne().skip(random).exec();
+    const res = await this.userModel
+      .findOne(undefined, { _id: 0, name: 1, url: 1 })
+      .skip(random)
+      .exec();
     return res;
   }
 }

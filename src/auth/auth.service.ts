@@ -18,20 +18,21 @@ export class AuthService {
 
   //简单地用jwtService签发token给客户端，controller会在调用guard之后调用这个方法
   async certificateUser(user: User) {
-    const payload = { username: user.username, sub: user._id };
+    const payload = { account: user.account, sub: user._id };
     return {
-      accessToken: this.jwtService.sign(payload),
+      token: this.jwtService.sign(payload),
     };
   }
 
   //给local strategy使用的验证方法，对用户做登录验证
-  async validateUser(username: string, pass: string): Promise<User> {
-    const user = await this.userModel.findOne({ username });
-    //因为username是唯一的，所以没找到就是失败
+  async validateUser(account: string, pass: string): Promise<User> {
+    const user = await this.userModel.findOne({ account });
+
+    //因为account是唯一的，所以没找到就是失败
     if (!user) {
       return null;
     }
-    //通过username验证后要使用bcrypt对密码进行验证
+    //通过account验证后要使用bcrypt对密码进行验证
     const valid = await bcrypt.compare(pass, user.password);
 
     if (valid) {

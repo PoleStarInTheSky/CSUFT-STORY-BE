@@ -19,7 +19,7 @@ export class UserController {
    *DTO要使用类型而不是接口，这样能使用很多类验证的装饰器
    */
   @Post('/register')
-  async signUp(
+  async register(
     @Body(ValidationPipe) userRegisterDto: UserRegisterDto,
   ): Promise<void | string> {
     return await this.userService.register(userRegisterDto);
@@ -28,6 +28,8 @@ export class UserController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   async signIn(@Request() req) {
+    //下面只是简单签发jwt，验证的步骤由guard完成
+
     return this.userService.login(req.user);
   }
 

@@ -16,12 +16,12 @@ export class UserService {
    *Promise<void>，这里的void泛型意思是Promise resolve的值是void，即undefined
    */
   async register(userRegisterDto: UserRegisterDto): Promise<void | string> {
-    const { username, password } = userRegisterDto;
+    const { account, password } = userRegisterDto;
 
     //bcrypt是一种加密算法，第二个参数越高表示生成的哈希越安全
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = new this.userModel({ username, password: hashedPassword });
+    const user = new this.userModel({ account, password: hashedPassword });
 
     try {
       await user.save();
