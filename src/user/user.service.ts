@@ -15,7 +15,7 @@ export class UserService {
    *async的返回值一定是一个Promise对象
    *Promise<void>，这里的void泛型意思是Promise resolve的值是void，即undefined
    */
-  async register(userRegisterDto: UserRegisterDto): Promise<void | string> {
+  async register(userRegisterDto: UserRegisterDto) {
     const { account, password } = userRegisterDto;
 
     //bcrypt是一种加密算法，第二个参数越高表示生成的哈希越安全
@@ -24,11 +24,11 @@ export class UserService {
     const user = new this.userModel({ account, password: hashedPassword });
 
     try {
-      await user.save();
-      return 'Sign up successfully';
+      //储存成功直接返回数据库信息
+      return await user.save();
     } catch (error) {
       if (error.code === 11000) {
-        throw new ConflictException('User already exists');
+        throw new ConflictException('用户已存在');
       }
       throw error;
     }
