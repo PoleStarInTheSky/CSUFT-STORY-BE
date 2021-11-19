@@ -3,16 +3,15 @@ import * as mongoose from 'mongoose';
 export const PostSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
   },
   desc: {
     type: String,
-    required: true,
   },
   header_img: {
     type: String,
-    required: true,
   },
+  likes: { type: Number },
+  type: { type: String, required: true },
   author: {
     type: String,
     require: true,

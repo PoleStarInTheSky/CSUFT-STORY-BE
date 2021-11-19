@@ -27,6 +27,14 @@ export class PostService {
       throw error;
     }
   }
+  //随机返回一篇博客
+  async getRandomPost(): Promise<Post> {
+    const cnt = await this.postModel.count().exec();
+    //均匀生成[0,cnt-1]的整数
+    const random = Math.floor(Math.random() * cnt);
+    const res = await this.postModel.findOne().skip(random).exec();
+    return res;
+  }
   //查找某一篇博客
   async getPost(postID): Promise<Post> {
     const post = await this.postModel.findById(postID).exec();
@@ -49,13 +57,20 @@ export class PostService {
     if (reqAccount !== createPostDto.author) {
       throw new ForbiddenException('只能编辑自己的故事');
     }
-    //{new:true} 表示返回更新后的document
-    const editedPost = await this.postModel.findByIdAndUpdate(
-      postID,
-      createPostDto,
-      { new: true },
-    );
-    return editedPost;
+    const toEditedPost = await this.postModel.findByIdAndUpdate(postID);
+    if (toEditedPost.type === 'formal' && createPostDto.type === 'draft') {
+      throw new ForbiddenException('不能将已发布的文章变回草稿');
+    }
+    //这里适用于刚刚从草稿发布成正文的情况
+    //可以处理一些数据
+    //比如点赞数，不论前端传什么，后端这里都应该初始化为0 ，因为这时候的点赞一定是0
+    if (toEditedPost.type === 'draft' && createPostDto.type === 'formal') {
+      createPostDto.likes = 0;
+    }
+    //{new:true} 表示返回的是更改后的数据
+    return await this.postModel.findByIdAndUpdate(postID, createPostDto, {
+      new: true,
+    });
   }
   //删除某一篇博客
   async deletePost(postID: string, reqAccount: string): Promise<any> {
