@@ -2,8 +2,9 @@ import {
   Controller,
   Post,
   UseInterceptors,
-  Bind,
+  HttpStatus,
   UploadedFile,
+  Res,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -29,9 +30,11 @@ export class UploadController {
       }),
     }),
   )
-  //从中间件拿出文件并赋值给 uploadFile 函数
-  @Bind(UploadedFile())
-  uploadFile(image) {
+  uploadFile(@UploadedFile() image, @Res() res) {
     console.log(image);
+    //上传成功后放回图片地址
+    return res
+      .status(HttpStatus.OK)
+      .json({ url: `${process.env.IMG_URL_PREFIX}${image.filename}` });
   }
 }
