@@ -33,10 +33,7 @@ export class PostController {
       createPostDto,
       req.user.account as string,
     );
-    return res.status(HttpStatus.OK).json({
-      message: '新建故事成功',
-      post: newPost,
-    });
+    return res.status(HttpStatus.OK).json(newPost);
   }
 
   //用id查找
@@ -79,10 +76,7 @@ export class PostController {
     if (!editedPost) {
       throw new NotFoundException('所编辑的故事不存在！');
     }
-    return res.status(HttpStatus.OK).json({
-      message: '故事更新成功',
-      post: editedPost,
-    });
+    return res.status(HttpStatus.OK).json(editedPost);
   }
   @UseGuards(JwtAuthGuard)
   @Delete(':postID')

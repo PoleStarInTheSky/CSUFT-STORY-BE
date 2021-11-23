@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { ResourceModule } from './resource/resource.module';
 import { PostModule } from './post/post.module';
 import { UploadModule } from './upload/upload.module';
+import { DraftModule } from './draft/draft.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UploadModule } from './upload/upload.module';
     ResourceModule,
     PostModule,
     UploadModule,
+    DraftModule,
   ],
   controllers: [AppController],
   providers: [AppService],

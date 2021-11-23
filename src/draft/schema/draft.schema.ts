@@ -1,21 +1,18 @@
 import * as mongoose from 'mongoose';
 //MongodbModule引入时配置的schema
-export const PostSchema = new mongoose.Schema({
+export const DraftSchema = new mongoose.Schema({
+  //由于是草稿，title decs header_img body 都不做强制要求
   title: {
     type: String,
-    required: true,
   },
   desc: {
     type: String,
-    required: true,
   },
   header_img: {
     type: String,
-    required: true,
   },
   body: {
     type: String,
-    required: true,
   },
   author: {
     type: String,

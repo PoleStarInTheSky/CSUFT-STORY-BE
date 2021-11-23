@@ -57,18 +57,7 @@ export class PostService {
     if (reqAccount !== createPostDto.author) {
       throw new ForbiddenException('只能编辑自己的故事');
     }
-    const toEditedPost = await this.postModel.findByIdAndUpdate(postID);
-    if (toEditedPost.type === 'formal' && createPostDto.type === 'draft') {
-      throw new ForbiddenException('不能将已发布的文章变回草稿');
-    }
-    //这里适用于刚刚从草稿发布成正文的情况
-    //可以处理一些数据
-    //比如点赞数，不论前端传什么，后端这里都应该初始化为0 ，因为这时候的点赞一定是0
-    if (toEditedPost.type === 'draft' && createPostDto.type === 'formal') {
-      createPostDto.likes = 0;
-    }
-    //{new:true} 表示返回的是更改后的数据
-    return await this.postModel.findByIdAndUpdate(postID, createPostDto, {
+    return await this.postModel.findByIdAndUpdate(postID, {
       new: true,
     });
   }

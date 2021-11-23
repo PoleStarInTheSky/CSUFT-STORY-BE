@@ -35,6 +35,6 @@ export class UploadController {
     //上传成功后放回图片地址
     return res
       .status(HttpStatus.OK)
-      .json({ url: `${process.env.IMG_URL_PREFIX}${image.filename}` });
+      .json({ url: `${process.env.IMG_URL_PREFIX}/${image.filename}` });
   }
 }
